@@ -89,11 +89,11 @@ def preprocess_data(dataset_name: str, bipartite: bool = True, node_feat_dim: in
     :param node_feat_dim: int, dimension of node features
     :return:
     """
-    Path("../processed_data/{}/".format(dataset_name)).mkdir(parents=True, exist_ok=True)
-    PATH = '../DG_data/{}/{}.csv'.format(dataset_name, dataset_name)
-    OUT_DF = '../processed_data/{}/ml_{}.csv'.format(dataset_name, dataset_name)
-    OUT_FEAT = '../processed_data/{}/ml_{}.npy'.format(dataset_name, dataset_name)
-    OUT_NODE_FEAT = '../processed_data/{}/ml_{}_node.npy'.format(dataset_name, dataset_name)
+    Path("./processed_data/{}/".format(dataset_name)).mkdir(parents=True, exist_ok=True)
+    PATH = './DG_data/{}/{}.csv'.format(dataset_name, dataset_name)
+    OUT_DF = './processed_data/{}/ml_{}.csv'.format(dataset_name, dataset_name)
+    OUT_FEAT = './processed_data/{}/ml_{}.npy'.format(dataset_name, dataset_name)
+    OUT_NODE_FEAT = './processed_data/{}/ml_{}_node.npy'.format(dataset_name, dataset_name)
 
     df, edge_feats = preprocess(PATH)
     new_df = reindex(df, bipartite)
@@ -124,14 +124,14 @@ def check_data(dataset_name: str):
     :return:
     """
     # original data paths
-    origin_OUT_DF = '../DG_data/{}/ml_{}.csv'.format(dataset_name, dataset_name)
-    origin_OUT_FEAT = '../DG_data/{}/ml_{}.npy'.format(dataset_name, dataset_name)
-    origin_OUT_NODE_FEAT = '../DG_data/{}/ml_{}_node.npy'.format(dataset_name, dataset_name)
+    origin_OUT_DF = './DG_data/{}/ml_{}.csv'.format(dataset_name, dataset_name)
+    origin_OUT_FEAT = './DG_data/{}/ml_{}.npy'.format(dataset_name, dataset_name)
+    origin_OUT_NODE_FEAT = './DG_data/{}/ml_{}_node.npy'.format(dataset_name, dataset_name)
 
     # processed data paths
-    OUT_DF = '../processed_data/{}/ml_{}.csv'.format(dataset_name, dataset_name)
-    OUT_FEAT = '../processed_data/{}/ml_{}.npy'.format(dataset_name, dataset_name)
-    OUT_NODE_FEAT = '../processed_data/{}/ml_{}_node.npy'.format(dataset_name, dataset_name)
+    OUT_DF = './processed_data/{}/ml_{}.csv'.format(dataset_name, dataset_name)
+    OUT_FEAT = './processed_data/{}/ml_{}.npy'.format(dataset_name, dataset_name)
+    OUT_NODE_FEAT = './processed_data/{}/ml_{}_node.npy'.format(dataset_name, dataset_name)
 
     # Load original data
     origin_g_df = pd.read_csv(origin_OUT_DF)
@@ -153,7 +153,7 @@ def check_data(dataset_name: str):
 parser = argparse.ArgumentParser('Interface for preprocessing datasets')
 parser.add_argument('--dataset_name', type=str,
                     choices=['wikipedia', 'reddit', 'mooc', 'lastfm', 'myket', 'enron', 'SocialEvo', 'uci',
-                             'Flights', 'CanParl', 'USLegis', 'UNtrade', 'UNvote', 'Contacts'],
+                             'Flights', 'CanParl', 'USLegis', 'UNtrade', 'UNvote', 'Contacts','my_data'],
                     help='Dataset name', default='wikipedia')
 parser.add_argument('--node_feat_dim', type=int, default=172, help='Number of node raw features')
 
@@ -161,8 +161,8 @@ args = parser.parse_args()
 
 print(f'preprocess dataset {args.dataset_name}...')
 if args.dataset_name in ['enron', 'SocialEvo', 'uci']:
-    Path("../processed_data/{}/".format(args.dataset_name)).mkdir(parents=True, exist_ok=True)
-    copy_tree("../DG_data/{}/".format(args.dataset_name), "../processed_data/{}/".format(args.dataset_name))
+    Path("./processed_data/{}/".format(args.dataset_name)).mkdir(parents=True, exist_ok=True)
+    copy_tree("./DG_data/{}/".format(args.dataset_name), "./processed_data/{}/".format(args.dataset_name))
     print(f'the original dataset of {args.dataset_name} is unavailable, directly use the processed dataset by previous works.')
 else:
     # bipartite dataset
@@ -172,6 +172,6 @@ else:
         preprocess_data(dataset_name=args.dataset_name, bipartite=False, node_feat_dim=args.node_feat_dim)
     print(f'{args.dataset_name} is processed successfully.')
 
-    if args.dataset_name not in ['myket']:
+    if args.dataset_name not in ['myket','my_data']:
         check_data(args.dataset_name)
     print(f'{args.dataset_name} passes the checks successfully.')
